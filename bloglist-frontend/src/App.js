@@ -35,7 +35,7 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    
+
     try {
       const user = await loginService.login({
         username, password,
@@ -74,7 +74,7 @@ const App = () => {
       setTimeout(() => {
         setSuccessMessage(null)
       }, 3000)
-      } catch (exception) {
+    } catch (exception) {
       setErrorMessage('Something went wrong, blog could not be added :(')
       setTimeout(() => {
         setErrorMessage(null)
@@ -95,12 +95,12 @@ const App = () => {
       </div>
       <div>
         password
-          <input 
-            type='password'
-            value={password}
-            name='Password'
-            onChange={({ target }) => setPassword(target.value)}
-          />
+        <input
+          type='password'
+          value={password}
+          name='Password'
+          onChange={({ target }) => setPassword(target.value)}
+        />
       </div>
       <button type='submit'>login</button>
     </form>
@@ -109,46 +109,46 @@ const App = () => {
   const logOut = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setSuccessMessage(`${user.name} was successfully logged out`)
-      setTimeout(() => {
-        setSuccessMessage(null)
-      }, 3000)
+    setTimeout(() => {
+      setSuccessMessage(null)
+    }, 3000)
   }
 
   const updateLikesOf = id => {
     const blog = blogs.find(n => n.id === id)
     const updatedBlog = { ...blog, likes: blog.likes+1 }
-    
+
     try{
-    blogService
-      .update(id, updatedBlog)
-      .then(returnedBlog => {
-        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
-      })
-    setLength(length + 1)
+      blogService
+        .update(id, updatedBlog)
+        .then(returnedBlog => {
+          setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+        })
+      setLength(length + 1)
     } catch(exception) {
-        setErrorMessage(
-          `Blog '${blog.title}' was already removed from server`
-        )
-        setTimeout(() => {
+      setErrorMessage(
+        `Blog '${blog.title}' was already removed from server`
+      )
+      setTimeout(() => {
         setErrorMessage(null)
-        }, 3000)
-        setBlogs(blogs.filter(n => n.id !== id))
-      }
+      }, 3000)
+      setBlogs(blogs.filter(n => n.id !== id))
+    }
   }
 
   const removeBlogID = ( id, title, author ) => {
     if (window.confirm(`Remove blog ${title} by ${author}`)) {
       try{
-      blogService
-        .remove(id, user.token)
+        blogService
+          .remove(id, user.token)
       } catch(exception){
-          setErrorMessage(
-            `Blog was already removed from server`
-          )
-          setTimeout(() => {
+        setErrorMessage(
+          'Blog was already removed from server'
+        )
+        setTimeout(() => {
           setErrorMessage(null)
-          }, 3000)
-        }
+        }, 3000)
+      }
       setBlogs(blogs.filter(n => n.id !== id))
     }
   }
@@ -170,21 +170,21 @@ const App = () => {
       <ErrorNotification message={errorMessage} />
       <SuccessNotification message={successMessage} />
       <p>
-        {user.name} logged in 
+        {user.name} logged in
         <button onClick={() => logOut()}>logout</button>
       </p>
       <div>
-      <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
-      </Togglable>
+        <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+          <BlogForm createBlog={addBlog} />
+        </Togglable>
       </div>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog 
-        key={blog.id} 
-        blog={blog} 
-        updateLikes={() => updateLikesOf(blog.id)}
-        usersName={user.username}
-        removeBlog={() => removeBlogID( blog.id, blog.title, blog.author )}
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateLikes={() => updateLikesOf(blog.id)}
+          usersName={user.username}
+          removeBlog={() => removeBlogID( blog.id, blog.title, blog.author )}
         />
       )}
     </div>
