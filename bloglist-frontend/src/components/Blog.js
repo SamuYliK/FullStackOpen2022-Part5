@@ -26,19 +26,23 @@ const Blog = ({ blog, updateLikes, usersName, removeBlog }) => {
     display: correctPerson ? '' : 'none'
   }
 
+  const makeVisible = () => setVisible(!visible)
+
+  const makeNotVisible = () => setVisible(!visible)
+
   return (
     <div>
-      <div style={blogStyle}>
+      <div style={blogStyle} className='blogNotVisible'>
         {blog.title} {blog.author}
-        <button onClick={() => setVisible(!visible)}>view</button>
+        <button onClick={makeVisible}>view</button>
       </div>
-      <div style={blogStyleTwo}>
+      <div style={blogStyleTwo} className='blogVisible'>
         <div>
           {blog.title} {blog.author}
-          <button onClick={() => setVisible(!visible)}>hide</button>
+          <button onClick={makeNotVisible}>hide</button>
         </div>
         <div>{blog.url}</div>
-        <div>
+        <div className='likes'>
           likes {blog.likes}
           <button onClick={updateLikes}>like</button>
         </div>
